@@ -16,7 +16,9 @@ class UserViewController: UIViewController {
         navigationItem.title = "User"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
+        
+        APICaller.shared.getUser { _ in
+            
+        }
     }
-
-
 }

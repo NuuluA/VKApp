@@ -12,6 +12,7 @@ class FriendsViewController: UIViewController {
     private let tableView: UITableView = {
        let tableView = UITableView()
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -23,10 +24,7 @@ class FriendsViewController: UIViewController {
         search.searchBar.translatesAutoresizingMaskIntoConstraints = false
         return search
     }()
-    
-    private var friendsArray: [FriendsArray] = []
-    var filteredArray = [FriendsArray]()
-    
+
     private var seacrhBarTextIsEmpty: Bool {
         guard let text = searchController.searchBar.text else { return false }
         return text.isEmpty
@@ -36,11 +34,22 @@ class FriendsViewController: UIViewController {
         return searchController.isActive && !seacrhBarTextIsEmpty
     }
     
+    private var friendsArray: [FriendsItem] = []
+    private var filteredArray = [FriendsItem]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
         setConstraints()
         loadFriends()
+        APICaller.shared.getFriends { _ in
+            
+        }
+        initialSetupTableView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     private func initialSetup() {
@@ -49,6 +58,9 @@ class FriendsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.searchController = searchController
+    }
+    
+    private func initialSetupTableView() {
         searchController.searchResultsUpdater = self
         tableView.register(FriendsTableViewCell.self, forCellReuseIdentifier: FriendsTableViewCell.identifier)
         tableView.dataSource = self
@@ -58,7 +70,7 @@ class FriendsViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         tableView.frame = view.bounds
     }
-    
+
     private func loadFriends() {
         APICaller.shared.getFriends { [weak self] results in
             switch results {
@@ -74,6 +86,8 @@ class FriendsViewController: UIViewController {
     }
 }
 
+//MARK: - UISearchResultsUpdating
+
 extension FriendsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text else { return }
@@ -81,13 +95,15 @@ extension FriendsViewController: UISearchResultsUpdating {
     }
     
     private func filterArray(_ searchText: String) {
-        filteredArray = friendsArray.filter({ (filter: FriendsArray) -> Bool in
+        filteredArray = friendsArray.filter({ (filter: FriendsItem) -> Bool in
             return (filter.firstName?.lowercased().contains(searchText.lowercased()))!
         })
         tableView.reloadData()
     }
     
 }
+
+//MARK: - UITableViewDataSource, UITableViewDelegate
 
 extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -101,10 +117,20 @@ extension FriendsViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let model = friendsArray[indexPath.row]
+        let vc = DetailFriendsVC()
+        vc.configure(model: model)
+        present(vc, animated: true, completion: nil)
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         80
     }
 }
+
+//MARK: - SetConstraints
 
 extension FriendsViewController {
     private func setConstraints() {

@@ -34,12 +34,6 @@ class FriendsTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let lastSeenLabel: UILabel = {
-       let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setConstraints()
@@ -54,7 +48,7 @@ class FriendsTableViewCell: UITableViewCell {
         cellBackgroundView.frame = bounds
     }
 
-    public func configure(model: FriendsArray) {        
+    public func configure(model: FriendsItem) {        
         nameLabel.text = model.firstName
         
         let urlImage = URL(string: "\(model.photo100 ?? "")")
@@ -83,12 +77,6 @@ extension FriendsTableViewCell {
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 10),
             nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor)
-        ])
-        
-        cellBackgroundView.addSubview(lastSeenLabel)
-        NSLayoutConstraint.activate([
-            lastSeenLabel.trailingAnchor.constraint(equalTo: cellBackgroundView.trailingAnchor, constant: -10),
-            lastSeenLabel.centerYAnchor.constraint(equalTo: cellBackgroundView.centerYAnchor)
         ])
     }
 }

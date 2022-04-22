@@ -22,9 +22,8 @@ class AuthViewController: UIViewController {
         webViewVK.navigationDelegate = self
         setConstraints()
         
-        if let token = UserDefaults.standard.string(forKey: "token") {
-            AccessToken.shared.token = token
-        }
+        guard let token = UserDefaults.standard.string(forKey: "token") else { return }
+        AccessToken.shared.token = token
     }
     
     private func authVK() {
@@ -34,10 +33,10 @@ class AuthViewController: UIViewController {
         urlComponents.host = "oauth.vk.com"
         urlComponents.path = "/authorize"
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: "8138404"),
+            URLQueryItem(name: "client_id", value: "8142557"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
-            URLQueryItem(name: "scope", value: "262150"),
+            URLQueryItem(name: "scope", value:  "groups, photos, wall, friends, video, status, notes, pages, status, users"),
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "revoke", value: "1"),
             URLQueryItem(name: "v", value: "5.81")
@@ -70,7 +69,6 @@ extension AuthViewController: WKNavigationDelegate {
             }
         
         let token = params["access_token"]
-        
         UserDefaults.standard.setValue(token, forKey: "token")
         let vc = MainTabBarViewController()
         vc.modalPresentationStyle = .fullScreen
