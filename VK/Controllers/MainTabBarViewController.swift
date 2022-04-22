@@ -15,25 +15,21 @@ class MainTabBarViewController: UITabBarController {
     }
 
     private func setupVC() {
-        let vc2 = UINavigationController(rootViewController: FriendsViewController())
-        let vc3 = UINavigationController(rootViewController: PhotosViewController())
-        let vc4 = UINavigationController(rootViewController: GroupsViewController())
-        let vc5 = UINavigationController(rootViewController: UserViewController())
+        let vc1 = UINavigationController(rootViewController: FriendsViewController())
+        let vc2 = UINavigationController(rootViewController: GroupsViewController())
+        let vc3 = UINavigationController(rootViewController: UserViewController())
 
+        vc1.tabBarItem.image = UIImage(systemName: "person.3.sequence")
+        vc2.tabBarItem.image = UIImage(systemName: "folder.fill")
+        vc3.tabBarItem.image = UIImage(systemName: "person")
         
-        vc2.tabBarItem.image = UIImage(systemName: "person.3.sequence")
-        vc3.tabBarItem.image = UIImage(systemName: "folder.fill")
-        vc4.tabBarItem.image = UIImage(systemName: "photo")
-        vc5.tabBarItem.image = UIImage(systemName: "person")
-        
-        vc2.title = "Friend"
-        vc3.title = "Group"
-        vc4.title = "Photo"
-        vc5.title = "User"
+        vc1.title = "Friend"
+        vc2.title = "Group"
+        vc3.title = "User"
         
         tabBar.tintColor = .label
         
-        setViewControllers([vc2, vc3, vc4, vc5], animated: true)
+        setViewControllers([vc1, vc2, vc3], animated: true)
     }
 
 }

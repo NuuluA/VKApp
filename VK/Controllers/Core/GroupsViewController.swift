@@ -13,10 +13,13 @@ class GroupsViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
-        navigationItem.title = "Group"
+        navigationItem.title = "Groups"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
-        
+ 
+        APICaller.shared.getGroups { _ in
+            
+        }
     }
 
 }

@@ -8,24 +8,27 @@
 import Foundation
 
 struct FriendsResponse: Codable {
-    let response: Friends?
+    let response: Response?
 }
 
-struct Friends: Codable {
+struct Response: Codable {
     let count: Int?
-    let items: [FriendsArray]?
+    let items: [FriendsItem]?
 }
 
-struct FriendsArray: Codable {
+struct FriendsItem: Codable {
     let id: Int?
-    let photo100: String?
     let lastName, trackCode, firstName: String?
+    let photo100: String?
+    let deactivated: String?
+    let lists: [Int]?
 
     enum CodingKeys: String, CodingKey {
         case id
-        case photo100 = "photo_100"
         case lastName = "last_name"
         case trackCode = "track_code"
         case firstName = "first_name"
+        case photo100 = "photo_100"
+        case deactivated, lists
     }
 }
